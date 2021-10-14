@@ -33,8 +33,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var faculties = await _context.Faculties
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var faculties = await _context.Faculties.FirstOrDefaultAsync(m => m.Id == id);
             if (faculties == null)
             {
                 return NotFound();

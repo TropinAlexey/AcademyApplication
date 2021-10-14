@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication.Data;
@@ -23,15 +24,14 @@ namespace WebApplication.Controllers
         }
 
         // GET: Departaments
-        public string ShowSearchForm(string Search)
+        public async Task<IActionResult> ShowSearchForm(string Search)
         {
-            return "You entered:" + Search;
+            return View("Index", await _context.Departaments.Where(d => d.Name.Contains(Search) || d.Financing == Convert.ToDecimal(Search) || d.Id.ToString() == Search).ToListAsync());
         }
 
         // GET: Departaments/Search
         public async Task<IActionResult> DepartamentsSearch()
         {
-            
             return View();
         }
 

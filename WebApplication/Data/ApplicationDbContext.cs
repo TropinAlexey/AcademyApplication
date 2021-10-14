@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WebApplication.Models;
 
 namespace WebApplication.Data
@@ -13,8 +10,10 @@ namespace WebApplication.Data
             : base(options)
         {
         }
-        public DbSet<WebApplication.Models.Departaments> Departaments { get; set; }
-        public DbSet<WebApplication.Models.Faculties> Faculties { get; set; }
-        public DbSet<WebApplication.Models.Groups> Groups { get; set; }
+
+        public DbSet<Departaments> Departaments { get; set; }
+        public DbSet<Faculties> Faculties { get; set; }
+        public DbSet<Groups> Groups { get; set; }
+        public DbSet<Teachers> Teachers { get; set; }
     }
 }
