@@ -221,7 +221,7 @@ namespace WebApplication.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("WebApplication.Models.Departaments", b =>
+            modelBuilder.Entity("WebApplication.Models.Departments", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -236,10 +236,10 @@ namespace WebApplication.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Departaments");
+                    b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("WebApplication.Models.Faculties", b =>
+            modelBuilder.Entity("WebApplication.Models.Faculty", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -275,7 +275,7 @@ namespace WebApplication.Data.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("WebApplication.Models.Teachers", b =>
+            modelBuilder.Entity("WebApplication.Models.Teacher", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

@@ -54,15 +54,15 @@ namespace WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Rating,Year")] Groups groups)
+        public async Task<IActionResult> Create([Bind("Id,Name,Rating,Year")] Group @group)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(groups);
+                _context.Add(@group);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(groups);
+            return View(@group);
         }
 
         // GET: Groups/Edit/5
@@ -86,9 +86,9 @@ namespace WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Rating,Year")] Groups groups)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Rating,Year")] Group @group)
         {
-            if (id != groups.Id)
+            if (id != @group.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(groups);
+                    _context.Update(@group);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GroupsExists(groups.Id))
+                    if (!GroupsExists(@group.Id))
                     {
                         return NotFound();
                     }
@@ -113,7 +113,7 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(groups);
+            return View(@group);
         }
 
         // GET: Groups/Delete/5

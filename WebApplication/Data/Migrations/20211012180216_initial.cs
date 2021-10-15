@@ -7,7 +7,7 @@ namespace WebApplication.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Departaments",
+                name: "Departments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -17,14 +17,14 @@ namespace WebApplication.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Departaments", x => x.Id);
+                    table.PrimaryKey("PK_Departments", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Departaments");
+                name: "Departments");
         }
     }
 }

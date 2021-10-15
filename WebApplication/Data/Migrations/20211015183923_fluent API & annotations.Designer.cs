@@ -10,16 +10,31 @@ using WebApplication.Data;
 namespace WebApplication.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211012183140_added Faculties and Groups")]
-    partial class addedFacultiesandGroups
+    [Migration("20211015183923_fluent API & annotations")]
+    partial class fluentAPIannotations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.10")
+                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("GroupLecture", b =>
+                {
+                    b.Property<int>("GroupsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LecturesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GroupsId", "LecturesId");
+
+                    b.HasIndex("LecturesId");
+
+                    b.ToTable("GroupLecture");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -221,20 +236,35 @@ namespace WebApplication.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("WebApplication.Models.Departments", b =>
+            modelBuilder.Entity("WebApplication.Models.Department", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("FacultyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FacultyId1")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Financing")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("money");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FacultyId")
+                        .IsUnique();
+
+                    b.HasIndex("FacultyId1");
+
+                    b.HasIndex("Name");
 
                     b.ToTable("Departments");
                 });
@@ -247,22 +277,29 @@ namespace WebApplication.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name");
 
                     b.ToTable("Faculties");
                 });
 
-            modelBuilder.Entity("WebApplication.Models.Groups", b =>
+            modelBuilder.Entity("WebApplication.Models.Group", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
@@ -272,7 +309,114 @@ namespace WebApplication.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("Rating");
+
+                    b.HasIndex("Year");
+
                     b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("WebApplication.Models.Lecture", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("LectureRoom")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LectureRoom");
+
+                    b.HasIndex("SubjectId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("Lectures");
+                });
+
+            modelBuilder.Entity("WebApplication.Models.Subject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name");
+
+                    b.ToTable("Subjects");
+                });
+
+            modelBuilder.Entity("WebApplication.Models.Teacher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("EmploymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<decimal>("Premium")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Salary")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmploymentDate");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("Premium", "Salary");
+
+                    b.ToTable("Teachers");
+                });
+
+            modelBuilder.Entity("GroupLecture", b =>
+                {
+                    b.HasOne("WebApplication.Models.Group", null)
+                        .WithMany()
+                        .HasForeignKey("GroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication.Models.Lecture", null)
+                        .WithMany()
+                        .HasForeignKey("LecturesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -324,6 +468,66 @@ namespace WebApplication.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApplication.Models.Department", b =>
+                {
+                    b.HasOne("WebApplication.Models.Faculty", "Faculty")
+                        .WithOne("Departments")
+                        .HasForeignKey("WebApplication.Models.Department", "FacultyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication.Models.Faculty", null)
+                        .WithMany()
+                        .HasForeignKey("FacultyId1");
+
+                    b.Navigation("Faculty");
+                });
+
+            modelBuilder.Entity("WebApplication.Models.Group", b =>
+                {
+                    b.HasOne("WebApplication.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("WebApplication.Models.Lecture", b =>
+                {
+                    b.HasOne("WebApplication.Models.Subject", "Subject")
+                        .WithMany("Lectures")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication.Models.Teacher", "Teacher")
+                        .WithMany("Lectures")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("WebApplication.Models.Faculty", b =>
+                {
+                    b.Navigation("Departments");
+                });
+
+            modelBuilder.Entity("WebApplication.Models.Subject", b =>
+                {
+                    b.Navigation("Lectures");
+                });
+
+            modelBuilder.Entity("WebApplication.Models.Teacher", b =>
+                {
+                    b.Navigation("Lectures");
                 });
 #pragma warning restore 612, 618
         }
