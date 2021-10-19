@@ -5,6 +5,7 @@ a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
+    color: cornflowerblue;
 }
 
 /* Provide sufficient contrast against white background */
@@ -61,6 +62,7 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+    background-color: cornflowerblue;
 }
 .footer {
   position: absolute;

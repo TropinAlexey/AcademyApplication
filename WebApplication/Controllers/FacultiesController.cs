@@ -6,23 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
+using WebApplication.Data.Repositories;
 using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
     public class FacultiesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IFacultiesRepository _repo;
 
-        public FacultiesController(ApplicationDbContext context)
+        public FacultiesController(IFacultiesRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
+
 
         // GET: Faculties
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Faculties.ToListAsync());
+            return View("Index", await _repo.GetMany().ToListAsync());
         }
 
         // GET: Faculties/Details/5
@@ -33,7 +35,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var faculties = await _context.Faculties.FirstOrDefaultAsync(m => m.Id == id);
+            var faculties = await _repo.GetAsync(m => m.Id == id);
             if (faculties == null)
             {
                 return NotFound();
@@ -57,8 +59,7 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(faculties);
-                await _context.SaveChangesAsync();
+                await _repo.AddAsync(faculties);
                 return RedirectToAction(nameof(Index));
             }
             return View(faculties);
@@ -72,12 +73,13 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var faculties = await _context.Faculties.FindAsync(id);
-            if (faculties == null)
+            var entity = await _repo.GetAsync(f => f.Id == id);
+            await _repo.UpdateAsync(entity);
+            if (entity == null)
             {
                 return NotFound();
             }
-            return View(faculties);
+            return View(entity);
         }
 
         // POST: Faculties/Edit/5
@@ -89,19 +91,18 @@ namespace WebApplication.Controllers
         {
             if (id != faculties.Id)
             {
-                return NotFound();
+                return NotFound($"Id is not equal with {nameof(Faculty)}.Id");
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(faculties);
-                    await _context.SaveChangesAsync();
+                    await _repo.UpdateAsync(faculties);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FacultiesExists(faculties.Id))
+                    if (!await FacultiesExistsAsync(faculties.Id))
                     {
                         return NotFound();
                     }
@@ -123,8 +124,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var faculties = await _context.Faculties
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var faculties = await _repo.GetAsync(f => f.Id == id);
             if (faculties == null)
             {
                 return NotFound();
@@ -138,15 +138,15 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var faculties = await _context.Faculties.FindAsync(id);
-            _context.Faculties.Remove(faculties);
-            await _context.SaveChangesAsync();
+            var faculties = await _repo.GetAsync(f => f.Id == id);
+            if (faculties == null) return NotFound($"Record with id: {id} is not found");
+            await _repo.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FacultiesExists(int id)
+        private Task<bool> FacultiesExistsAsync(int id)
         {
-            return _context.Faculties.Any(e => e.Id == id);
+            return _repo.AnyAsync(e => e.Id == id);
         }
     }
 }
