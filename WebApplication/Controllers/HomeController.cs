@@ -1,21 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+using WebApplication.Data.Repositories;
 using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IFacultiesRepository _facultiesRepository;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IFacultiesRepository facultiesRepository)
         {
             _logger = logger;
+            _facultiesRepository = facultiesRepository;
         }
 
         public IActionResult Index()
@@ -23,9 +22,9 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Overview()
         {
-            return View();
+            return View(_facultiesRepository.GetOverview());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

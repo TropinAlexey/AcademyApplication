@@ -56,6 +56,7 @@ namespace WebApplication.Controllers
         // GET: Departments/Create
         public IActionResult Create()
         {
+            ViewData["FacultiesDropDown"] = _context.Faculties.ToList();
             return View();
         }
 
@@ -64,7 +65,7 @@ namespace WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Financing,Name")] Department department)
+        public async Task<IActionResult> Create([Bind("Id,Financing,Name,FacultyId")] Department department)
         {
             if (ModelState.IsValid)
             {

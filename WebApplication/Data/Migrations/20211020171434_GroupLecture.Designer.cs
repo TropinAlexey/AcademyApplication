@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication.Data;
 
 namespace WebApplication.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211020171434_GroupLecture")]
+    partial class GroupLecture
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,6 +246,9 @@ namespace WebApplication.Data.Migrations
                     b.Property<int>("FacultyId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("FacultyId1")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Financing")
                         .HasColumnType("money");
 
@@ -254,11 +259,86 @@ namespace WebApplication.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FacultyId");
+                    b.HasIndex("FacultyId")
+                        .IsUnique();
+
+                    b.HasIndex("FacultyId1");
 
                     b.HasIndex("Name");
 
                     b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("WebApplication.Models.Dto.OverviewDto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DepartmentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EmploymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FacultyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FacultyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Financing")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GroupName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("LectureId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LectureRoom")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Premium")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Salary")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubjectName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TeacherName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TeacherSurname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Year")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OverviewDto");
                 });
 
             modelBuilder.Entity("WebApplication.Models.Faculty", b =>
@@ -485,11 +565,17 @@ namespace WebApplication.Data.Migrations
 
             modelBuilder.Entity("WebApplication.Models.Department", b =>
                 {
-                    b.HasOne("WebApplication.Models.Faculty", null)
-                        .WithMany()
-                        .HasForeignKey("FacultyId")
+                    b.HasOne("WebApplication.Models.Faculty", "Faculty")
+                        .WithOne("Departments")
+                        .HasForeignKey("WebApplication.Models.Department", "FacultyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("WebApplication.Models.Faculty", null)
+                        .WithMany()
+                        .HasForeignKey("FacultyId1");
+
+                    b.Navigation("Faculty");
                 });
 
             modelBuilder.Entity("WebApplication.Models.Group", b =>
@@ -520,6 +606,11 @@ namespace WebApplication.Data.Migrations
                     b.Navigation("Subject");
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("WebApplication.Models.Faculty", b =>
+                {
+                    b.Navigation("Departments");
                 });
 
             modelBuilder.Entity("WebApplication.Models.Subject", b =>

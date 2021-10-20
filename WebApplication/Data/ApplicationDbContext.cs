@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Models;
+using WebApplication.Models.Dto;
 
 namespace WebApplication.Data
 {
@@ -71,6 +72,7 @@ namespace WebApplication.Data
         public DbSet<Group> Groups { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Lecture> Lectures { get; set; }
+        public DbSet<GroupLecture> GroupsLectures { get; set; }
         public DbSet<Subject> Subjects { get; set; }
     }
 }

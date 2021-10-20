@@ -7,7 +7,5 @@ namespace WebApplication.Models
         public int Id { get; set; }
         [DisplayName("Название")]
         public string Name { get; set; }
-        
-        public virtual Department Departments { get; set; }
     }
 }
