@@ -18,10 +18,9 @@ namespace WebApplication.Models
         [DisplayName("Название")]
         [MaxLength(250)]
         public string Name { get; set; }
-
-        [InverseProperty(nameof(Faculty.Id))]
         public int FacultyId { get; set; }
 
+        [ForeignKey("FacultyId")]
         public virtual Faculty Faculty { get; set; }
     }
 }

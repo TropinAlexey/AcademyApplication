@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Models;
-using WebApplication.Models.Dto;
 
 namespace WebApplication.Data
 {
@@ -16,7 +15,7 @@ namespace WebApplication.Data
         {
             modelBuilder.Entity<Department>(entity =>
             {
-                entity.ToTable("Departments");
+                entity.ToTable("Departments").HasOne(d => d.Faculty);
                 entity.HasIndex(p => p.Name);
             });
 

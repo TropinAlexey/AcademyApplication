@@ -43,20 +43,18 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var Departments = await _context.Departments
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (Departments == null)
+            var departments = await _context.Departments.FirstOrDefaultAsync(m => m.Id == id);
+            if (departments == null)
             {
                 return NotFound();
             }
 
-            return View(Departments);
+            return View(departments);
         }
 
         // GET: Departments/Create
         public IActionResult Create()
         {
-            ViewData["FacultiesDropDown"] = _context.Faculties.ToList();
             return View();
         }
 
@@ -84,12 +82,12 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var Departments = await _context.Departments.FindAsync(id);
-            if (Departments == null)
+            var departments = await _context.Departments.FindAsync(id);
+            if (departments == null)
             {
                 return NotFound();
             }
-            return View(Departments);
+            return View(departments);
         }
 
         // POST: Departments/Edit/5
