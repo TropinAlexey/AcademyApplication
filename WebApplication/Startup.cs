@@ -26,6 +26,7 @@ namespace WebApplication
 
             //Dependency Injections
             services.AddScoped<IFacultiesRepository, FacultiesRepository>();
+            services.AddScoped<IDepartmentsRepository, DepartmentsRepository>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
