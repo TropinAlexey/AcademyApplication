@@ -133,8 +133,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var Departments = await _context.Departments
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var Departments = await _context.Departments.FirstOrDefaultAsync(m => m.Id == id);
             if (Departments == null)
             {
                 return NotFound();

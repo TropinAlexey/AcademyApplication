@@ -244,9 +244,6 @@ namespace WebApplication.Data.Migrations
                     b.Property<int>("FacultyId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FacultyId1")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Financing")
                         .HasColumnType("money");
 
@@ -258,8 +255,6 @@ namespace WebApplication.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FacultyId");
-
-                    b.HasIndex("FacultyId1");
 
                     b.HasIndex("Name");
 
@@ -495,10 +490,6 @@ namespace WebApplication.Data.Migrations
                         .HasForeignKey("FacultyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("WebApplication.Models.Faculty", null)
-                        .WithMany()
-                        .HasForeignKey("FacultyId1");
 
                     b.Navigation("Faculty");
                 });

@@ -20,21 +20,20 @@ namespace WebApplication.Data
         {
             modelBuilder.Entity<Department>(entity =>
             {
-                entity.ToTable("Departments").HasOne(d => d.Faculty);
+                entity.ToTable("Departments");
                 entity.HasIndex(p => p.Name);
             });
 
             modelBuilder.Entity<Faculty>(entity =>
             {
-                entity.ToTable("Faculties").HasMany<Department>();
+                entity.ToTable("Faculties");
                 entity.HasIndex(p => p.Name);
                 entity.Property(p => p.Name).IsRequired();
             });
 
             modelBuilder.Entity<Group>(entity =>
             {
-                entity.ToTable("Groups").HasOne(t => t.Department);
-                entity.ToTable("Groups").HasMany(t => t.Lectures).WithMany(t => t.Groups);
+                entity.ToTable("Groups");
                 entity.HasIndex(p => p.Name);
                 entity.HasIndex(p => p.Rating);
                 entity.HasIndex(p => p.Year);
@@ -43,7 +42,7 @@ namespace WebApplication.Data
 
             modelBuilder.Entity<Teacher>(entity =>
             {
-                entity.ToTable("Teachers").HasMany(t => t.Lectures);
+                entity.ToTable("Teachers");
                 entity.HasIndex(p => p.Name);
                 entity.HasIndex(p => p.EmploymentDate);
                 entity.HasIndex(p => new {p.Premium, p.Salary});
@@ -55,17 +54,28 @@ namespace WebApplication.Data
 
             modelBuilder.Entity<Subject>(entity =>
             {
-                entity.ToTable("Subjects").HasMany(t => t.Lectures);
+                entity.ToTable("Subjects");
                 entity.HasIndex(p => p.Name);
                 entity.Property(p => p.Name).IsRequired().HasMaxLength(500);
             });
 
             modelBuilder.Entity<Lecture>(entity =>
             {
-                entity.ToTable("Lectures").HasOne(t => t.Subject);
-                //entity.ToTable("Lectures").HasOne(t => t.Teacher);
+                entity.ToTable("Lectures");
                 entity.HasIndex(p => p.LectureRoom);
                 entity.Property(p => p.LectureRoom).HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<GroupLecture>(entity =>
+            {
+                entity.ToTable("GroupsLectures");
+                entity.HasKey(p => p.Id);
+                entity.HasIndex(p => p.GroupId);
+                entity.HasIndex(p => p.LectureId);
+
+                entity.Property(p => p.GroupId);
+                entity.Property(p => p.LectureId);
+                entity.Property(p => p.DayOfWeek);
             });
 
             base.OnModelCreating(modelBuilder);

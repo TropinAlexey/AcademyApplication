@@ -37,16 +37,20 @@ namespace WebApplication.Data.Repositories
 
         public virtual IQueryable<T> GetMany()
         {
-            return _context.Set<T>();
+            return DbSetEntity;
         }
 
         public virtual IQueryable<T> GetMany(Expression<Func<T, bool>> predicate)
         {
-            return predicate != null ? _context.Set<T>().Where(predicate) : _context.Set<T>();
+            return predicate != null ? DbSetEntity.Where(predicate) : _context.Set<T>();
         }
 
         public virtual async Task<T> AddAsync(T entity)
         {
+            var id = entity.GetType().GetProperty("Id");
+            var record = await DbSetEntity.FindAsync(id);
+            if (record != null) throw new KeyNotFoundException($"Record with id: {id} is already exists");
+
             _context.Entry(entity).State = EntityState.Added;
             await _context.SaveChangesAsync();
             return entity;
@@ -61,7 +65,7 @@ namespace WebApplication.Data.Repositories
 
         public virtual async Task<T> DeleteAsync(int id)
         {
-            var entity = await _context.Set<T>().FindAsync(id);
+            var entity = await DbSetEntity.FindAsync(id);
             if (entity == null) throw new KeyNotFoundException($"Record with id: {id} is not found");
 
             _context.Entry(entity).State = EntityState.Deleted;
