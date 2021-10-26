@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using WebApplication.Models;
-using WebApplication.Models.Dto;
+﻿using WebApplication.Models;
 
 namespace WebApplication.Data.Repositories
 {

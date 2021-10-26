@@ -26,7 +26,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public IQueryable<Department> GetMany()
         {
-            _logger.LogWarning("Test message");
+            _logger.LogError("Test message");
             var result = _departmentsRepository.GetMany();
             return result;
         }
