@@ -8,6 +8,7 @@ namespace WebApplication.Models
         {
             Groups = new List<Group>();
         }
+
         public int Id { get; set; }
         public string LectureRoom { get; set; }
         public int SubjectId { get; set; }

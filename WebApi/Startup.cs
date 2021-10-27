@@ -11,6 +11,8 @@ using Serilog;
 using Serilog.Core;
 using WebApplication.Data;
 using WebApplication.Data.Repositories;
+using WebApplication.Services;
+using WebApplication.Services.Interfaces;
 
 namespace WebApi
 {
@@ -31,8 +33,15 @@ namespace WebApi
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
 
+            // Register DI
+            // Data Layer
             services.AddScoped<IFacultiesRepository, FacultiesRepository>();
             services.AddScoped<IDepartmentsRepository, DepartmentsRepository>();
+
+            //Business layer
+            services.AddScoped<IDepartmentsService, DepartmentsService>();
+            services.AddScoped<ICurrencyExchangeService, CurrencyExchangeService>();
+
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddSwaggerGen(c =>

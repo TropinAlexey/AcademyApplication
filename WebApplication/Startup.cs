@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApplication.Data;
 using WebApplication.Data.Repositories;
+using WebApplication.Services;
+using WebApplication.Services.Interfaces;
 
 namespace WebApplication
 {
@@ -25,11 +27,17 @@ namespace WebApplication
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             //Dependency Injections
+            //Data Layer
             services.AddScoped<IFacultiesRepository, FacultiesRepository>();
             services.AddScoped<IDepartmentsRepository, DepartmentsRepository>();
+            services.AddScoped<IDepartmentsRepository, DepartmentsRepository>();
+
+            // register Business Logic 
+            services.AddScoped<IDepartmentsService, DepartmentsService>();
+            services.AddScoped<ICurrencyExchangeService, CurrencyExchangeService>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
-
+            services.AddHttpClient();
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();

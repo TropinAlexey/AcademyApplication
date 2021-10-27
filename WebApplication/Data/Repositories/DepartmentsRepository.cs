@@ -1,4 +1,5 @@
 ﻿using WebApplication.Models;
+using WebApplication.Models;
 
 namespace WebApplication.Data.Repositories
 {

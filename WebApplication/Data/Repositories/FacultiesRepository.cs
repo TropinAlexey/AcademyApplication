@@ -2,6 +2,7 @@
 using System.Linq;
 using WebApplication.Models;
 using WebApplication.Models.Dto;
+using WebApplication.Services.Interfaces;
 
 namespace WebApplication.Data.Repositories
 {

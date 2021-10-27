@@ -1,20 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using WebApplication.Data.Repositories;
 using WebApplication.Models;
+using WebApplication.Services.Interfaces;
 
 namespace WebApplication.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IFacultiesRepository _facultiesRepository;
+        private readonly IDepartmentsService _departmentsService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, IFacultiesRepository facultiesRepository)
+        public HomeController(ILogger<HomeController> logger, IFacultiesRepository facultiesRepository, IDepartmentsService departmentsService)
         {
             _logger = logger;
-            _facultiesRepository = facultiesRepository;
+            _departmentsService = departmentsService;
         }
 
         public IActionResult Index()
@@ -22,9 +24,9 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        public IActionResult Overview()
+        public async Task<IActionResult> Overview()
         {
-            return View(_facultiesRepository.GetOverview());
+            return View(await _departmentsService.GetOverviewAsync());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

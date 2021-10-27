@@ -47,10 +47,6 @@ namespace WebApplication.Data.Repositories
 
         public virtual async Task<T> AddAsync(T entity)
         {
-            var id = entity.GetType().GetProperty("Id");
-            var record = await DbSetEntity.FindAsync(id);
-            if (record != null) throw new KeyNotFoundException($"Record with id: {id} is already exists");
-
             _context.Entry(entity).State = EntityState.Added;
             await _context.SaveChangesAsync();
             return entity;

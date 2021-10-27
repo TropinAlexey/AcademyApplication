@@ -1,41 +1,42 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 using System.Threading.Tasks;
 using WebApplication.Models;
 using WebApplication.Services.Interfaces;
 
 namespace WebApplication.Controllers
 {
-    public class DepartmentsController : Controller
+    [Route("Lectures")]
+    public class LectureController : Controller
     {
-        private readonly IDepartmentsService _departmentsService;
+        private readonly ILectureService _lectureService;
 
-        public DepartmentsController(IDepartmentsService departmentsService)
+        public LectureController(ILectureService lectureService)
         {
-            _departmentsService = departmentsService;
+            _lectureService = lectureService;
         }
 
-        // GET: Departments
+        // GET: Lectures
+        [Route("/Index")]
         public async Task<IActionResult> Index()
         {
-            var result = await _departmentsService.GetManyDepartments();
+            var result = await _lectureService.GetManyLecturesAsync();
             return View(result);
         }
 
-        // GET: Departments
+        // GET: Lectures
         public async Task<IActionResult> ShowSearchForm(string Search)
         {
-            return View("Index", await _departmentsService.SearchAsync(Search));
+            return View("Index", await _lectureService.SearchAsync(Search));
         }
 
-        // GET: Departments/Search
-        public IActionResult DepartmentsSearch()
+        // GET: Lectures/Search
+        public IActionResult LecturesSearch()
         {
-            return View();
+            return View("ShowSearchForm");
         }
 
-        // GET: Departments/Details/5
+        // GET: Lectures/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,37 +44,37 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var departments = await _departmentsService.GetDepartmentByIdAsync(id.Value);
-            if (departments == null)
+            var Lectures = await _lectureService.GetLectureIdAsync(id.Value);
+            if (Lectures == null)
             {
                 return NotFound();
             }
 
-            return View(departments);
+            return View(Lectures);
         }
 
-        // GET: Departments/Create
+        // GET: Lectures/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Departments/Create
+        // POST: Lectures/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Financing,Name,FacultyId")] Department department)
+        public async Task<IActionResult> Create([Bind("Id,LectureRoom,SubjectId,TeacherId")] Lecture entity)
         {
             if (ModelState.IsValid)
             {
-                _departmentsService.CreateDepartmentAsync(department);
+                await _lectureService.CreateLectureAsync(entity);
                 return RedirectToAction(nameof(Index));
             }
-            return View(department);
+            return View(entity);
         }
 
-        // GET: Departments/Edit/5
+        // GET: Lectures/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,22 +82,22 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var departments = await _departmentsService.GetDepartmentByIdAsync(id.Value);
-            if (departments == null)
+            var entity = await _lectureService.GetLectureIdAsync(id.Value);
+            if (entity == null)
             {
                 return NotFound();
             }
-            return View(departments);
+            return View(entity);
         }
 
-        // POST: Departments/Edit/5
+        // POST: Lectures/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Financing,Name,FacultyId")] Department department)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Financing,Name,FacultyId")] Lecture entity)
         {
-            if (id != department.Id)
+            if (id != entity.Id)
             {
                 return NotFound();
             }
@@ -105,11 +106,11 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    await _departmentsService.UpdateDepartmentAsync(department);
+                    await _lectureService.UpdateLectureAsync(entity);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DepartmentsExists(department.Id))
+                    if (!LecturesExists(entity.Id))
                     {
                         return NotFound();
                     }
@@ -120,10 +121,10 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(department);
+            return View(entity);
         }
 
-        // GET: Departments/Delete/5
+        // GET: Lectures/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,27 +132,27 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var Departments = await _departmentsService.GetDepartmentByIdAsync(id.Value);
-            if (Departments == null)
+            var entities = await _lectureService.GetLectureIdAsync(id.Value);
+            if (entities == null)
             {
                 return NotFound();
             }
 
-            return View(Departments);
+            return View(entities);
         }
 
-        // POST: Departments/Delete/5
+        // POST: Lectures/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _departmentsService.DeleteDepartmentAsync(id);
+            await _lectureService.DeleteLectureAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DepartmentsExists(int id)
+        private bool LecturesExists(int id)
         {
-            var result = _departmentsService.GetDepartmentByIdAsync(id);
+            var result = _lectureService.GetLectureIdAsync(id);
             return result != null;
         }
     }

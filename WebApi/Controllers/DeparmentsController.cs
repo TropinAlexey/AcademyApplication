@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using WebApplication.Data.Repositories;
 using WebApplication.Models;
+using WebApplication.Services.Interfaces;
 
 namespace WebApi.Controllers
 {
@@ -12,31 +11,24 @@ namespace WebApi.Controllers
     [ApiController]
     public class DeparmentsController : ControllerBase
     {
-        private readonly IDepartmentsRepository _departmentsRepository;
-        private readonly IFacultiesRepository _facultiesRepository;
+        private readonly IDepartmentsService _departmentsService;
 
-        public DeparmentsController(ILogger<DeparmentsController> logger, IDepartmentsRepository departmentsRepository, IFacultiesRepository facultiesRepository)
+        public DeparmentsController(ILogger<DeparmentsController> logger, IDepartmentsService departmentsService)
         {
-            _departmentsRepository = departmentsRepository;
-            _facultiesRepository = facultiesRepository;
+            _departmentsService = departmentsService;
         }
 
         [HttpGet]
-        public IQueryable<Department> GetMany()
+        public async Task<IActionResult> GetMany()
         {
-            var result = _departmentsRepository.GetMany();
-            return result;
+            var result = await _departmentsService.GetManyDepartments();
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var result = await _departmentsRepository.GetNotTrackedAsync(d => d.Id == id);
-            if (result != null)
-            {
-                result.Faculty = await _facultiesRepository.GetNotTrackedAsync(f => f.Id == result.FacultyId);
-            }
-
+            var result = await _departmentsService.GetDepartmentByIdAsync(id);
             if (result == null) return NotFound($"Record with id: {id} is not found");
             return Ok(result);
         }
@@ -46,8 +38,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                entity.Id = 0;
-                var result = await _departmentsRepository.AddAsync(entity);
+                var result = await _departmentsService.CreateDepartmentAsync(entity);
                 return Ok(result);
             }
             catch (Exception e)
@@ -61,7 +52,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var result = await _departmentsRepository.UpdateAsync(entity);
+                var result = await _departmentsService.UpdateDepartmentAsync(entity);
                 return Ok(result);
             }
             catch (Exception e)
@@ -71,11 +62,11 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             try
             {
-                var result = await _departmentsRepository.DeleteAsync(id);
+                var result = _departmentsService.DeleteDepartmentAsync(id);
                 if (result == null) return NotFound($"Department with id: {id} is not found");
                 return Ok(result);
             }

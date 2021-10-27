@@ -9,7 +9,7 @@ namespace WebApplication.Models
     {
         public int Id { get; set; }
 
-        [DisplayName("Финансирование, $")]
+        [DisplayName("Финансирование, €")]
         [Range(0, int.MaxValue)]
         [Column(TypeName = "money")]
         public decimal Financing { get; set; }
