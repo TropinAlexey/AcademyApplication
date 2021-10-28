@@ -30,10 +30,15 @@ namespace WebApplication
             //Data Layer
             services.AddScoped<IFacultiesRepository, FacultiesRepository>();
             services.AddScoped<IDepartmentsRepository, DepartmentsRepository>();
-            services.AddScoped<IDepartmentsRepository, DepartmentsRepository>();
+            services.AddScoped<ISubjectsRepository, SubjectsRepository>();
+            services.AddScoped<ILecturesRepository, LecturesRepository>();
+            services.AddScoped<ITeachersRepository, TeachersRepository>();
+            services.AddScoped<IGroupsRepository, GroupsRepository>();
+            services.AddScoped<IGroupLectureRepository, GroupLectureRepository>();
 
             // register Business Logic 
             services.AddScoped<IDepartmentsService, DepartmentsService>();
+            services.AddScoped<ILectureService, LectureService>();
             services.AddScoped<ICurrencyExchangeService, CurrencyExchangeService>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();

@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication.Models;
 using WebApplication.Services.Interfaces;
 
 namespace WebApplication.Controllers
 {
-    [Route("Lectures")]
+    [Route("Lecture")]
     public class LectureController : Controller
     {
         private readonly ILectureService _lectureService;
@@ -17,7 +18,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Lectures
-        [Route("/Index")]
+        [HttpGet("/Index")]
         public async Task<IActionResult> Index()
         {
             var result = await _lectureService.GetManyLecturesAsync();
@@ -25,18 +26,21 @@ namespace WebApplication.Controllers
         }
 
         // GET: Lectures
+        [HttpGet]
         public async Task<IActionResult> ShowSearchForm(string Search)
         {
             return View("Index", await _lectureService.SearchAsync(Search));
         }
 
         // GET: Lectures/Search
+        [HttpGet("Search")]
         public IActionResult LecturesSearch()
         {
             return View("ShowSearchForm");
         }
 
         // GET: Lectures/Details/5
+        [HttpGet("Details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -53,18 +57,22 @@ namespace WebApplication.Controllers
             return View(Lectures);
         }
 
-        // GET: Lectures/Create
-        public IActionResult Create()
+        // GET: Lecture/Create
+        [HttpGet("Create")]
+        public async Task<IActionResult> Create()
         {
+            ViewBag.Subject = new SelectList(await _lectureService.GetSubjectsAsync(), "Id", "Name");
+            ViewBag.Teacher = new SelectList(await _lectureService.GetTeachersAsync(), "Id", "Name");
+            ViewBag.Group = new SelectList(await _lectureService.GetGroupsAsync(), "Id", "Name");
             return View();
         }
 
-        // POST: Lectures/Create
+        // POST: Lecture/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,LectureRoom,SubjectId,TeacherId")] Lecture entity)
+        [HttpPost("Create")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,LectureRoom,SubjectId,TeacherId,GroupId,DayOfWeek")] Lecture @entity)
         {
             if (ModelState.IsValid)
             {
@@ -75,6 +83,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Lectures/Edit/5
+        [HttpGet("Edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,10 +99,10 @@ namespace WebApplication.Controllers
             return View(entity);
         }
 
-        // POST: Lectures/Edit/5
+        // POST: Lecture/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Financing,Name,FacultyId")] Lecture entity)
         {
@@ -124,7 +133,8 @@ namespace WebApplication.Controllers
             return View(entity);
         }
 
-        // GET: Lectures/Delete/5
+        // GET: Lecture/Delete/5
+        [HttpGet("delete")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,7 +151,7 @@ namespace WebApplication.Controllers
             return View(entities);
         }
 
-        // POST: Lectures/Delete/5
+        // POST: LecturesDelete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -1,22 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using WebApplication.Data.Repositories;
 using WebApplication.Models;
 using WebApplication.Services.Interfaces;
 
 namespace WebApplication.Controllers
 {
+    [Route("Departments")]
     public class DepartmentsController : Controller
     {
         private readonly IDepartmentsService _departmentsService;
+        private readonly IFacultiesRepository _facultiesRepository;
 
-        public DepartmentsController(IDepartmentsService departmentsService)
+        public DepartmentsController(IDepartmentsService departmentsService, IFacultiesRepository facultiesRepository)
         {
             _departmentsService = departmentsService;
+            _facultiesRepository = facultiesRepository;
         }
 
         // GET: Departments
+        [HttpGet("Index")]
         public async Task<IActionResult> Index()
         {
             var result = await _departmentsService.GetManyDepartments();
@@ -24,6 +29,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Departments
+        [HttpGet]
         public async Task<IActionResult> ShowSearchForm(string Search)
         {
             return View("Index", await _departmentsService.SearchAsync(Search));
@@ -36,6 +42,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Departments/Details/5
+        [HttpGet("Details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -53,27 +60,30 @@ namespace WebApplication.Controllers
         }
 
         // GET: Departments/Create
-        public IActionResult Create()
+        [HttpGet("Create")]
+        public async Task<IActionResult> Create()
         {
+            ViewBag.Faculty = new SelectList(await _facultiesRepository.GetMany().ToListAsync(), "Id", "Name");
             return View();
         }
 
         // POST: Departments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
+        [HttpPost("Create")]
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Financing,Name,FacultyId")] Department department)
         {
             if (ModelState.IsValid)
             {
-                _departmentsService.CreateDepartmentAsync(department);
+                await _departmentsService.CreateDepartmentAsync(department);
                 return RedirectToAction(nameof(Index));
             }
             return View(department);
         }
 
         // GET: Departments/Edit/5
+        [HttpGet("Edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,7 +102,7 @@ namespace WebApplication.Controllers
         // POST: Departments/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Financing,Name,FacultyId")] Department department)
         {
@@ -124,6 +134,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Departments/Delete/5
+        [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,7 +152,7 @@ namespace WebApplication.Controllers
         }
 
         // POST: Departments/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

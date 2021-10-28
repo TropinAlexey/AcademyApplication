@@ -12,5 +12,8 @@ namespace WebApplication.Services.Interfaces
         Task<Lecture> UpdateLectureAsync(Lecture entity);
         Task<Lecture> DeleteLectureAsync(int id);
         Task<ICollection<Lecture>> SearchAsync(string search);
+        Task<IList<Subject>> GetSubjectsAsync();
+        Task<IList<Teacher>> GetTeachersAsync();
+        Task<IList<Group>> GetGroupsAsync();
     }
 }
