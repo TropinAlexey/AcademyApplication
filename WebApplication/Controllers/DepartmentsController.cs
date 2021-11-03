@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication.Data.Repositories;
 using WebApplication.Models;
@@ -61,6 +62,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Departments/Create
+        [Authorize]
         [HttpGet("Create")]
         public async Task<IActionResult> Create()
         {
@@ -72,7 +74,8 @@ namespace WebApplication.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Create")]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Financing,Name,FacultyId")] Department department)
         {
             if (ModelState.IsValid)
@@ -85,6 +88,7 @@ namespace WebApplication.Controllers
 
         // GET: Departments/Edit/5
         [HttpGet("Edit")]
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -105,6 +109,7 @@ namespace WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Financing,Name,FacultyId")] Department department)
         {
             if (id != department.Id)
@@ -136,6 +141,7 @@ namespace WebApplication.Controllers
 
         // GET: Departments/Delete/5
         [HttpGet("Delete/{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -155,6 +161,7 @@ namespace WebApplication.Controllers
         // POST: Departments/Delete/5
         [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _departmentsService.DeleteDepartmentAsync(id);

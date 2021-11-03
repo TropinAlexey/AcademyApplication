@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication.Models;
 using WebApplication.Services.Interfaces;
@@ -59,6 +60,7 @@ namespace WebApplication.Controllers
 
         // GET: Lecture/Create
         [HttpGet("Create")]
+        [Authorize]
         public async Task<IActionResult> Create()
         {
             ViewBag.Subject = new SelectList(await _lectureService.GetSubjectsAsync(), "Id", "Name");
@@ -72,6 +74,7 @@ namespace WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,LectureRoom,SubjectId,TeacherId,GroupId,DayOfWeek")] Lecture @entity)
         {
             if (ModelState.IsValid)
@@ -84,6 +87,7 @@ namespace WebApplication.Controllers
 
         // GET: Lectures/Edit/5
         [HttpGet("Edit")]
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -135,6 +139,7 @@ namespace WebApplication.Controllers
 
         // GET: Lecture/Delete/5
         [HttpGet("delete")]
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -154,6 +159,7 @@ namespace WebApplication.Controllers
         // POST: LecturesDelete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _lectureService.DeleteLectureAsync(id);

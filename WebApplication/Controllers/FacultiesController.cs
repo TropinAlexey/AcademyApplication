@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using WebApplication.Data.Repositories;
 using WebApplication.Models;
 
@@ -17,12 +18,14 @@ namespace WebApplication.Controllers
 
 
         // GET: Faculties
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             return View("Index", await _repo.GetMany().ToListAsync());
         }
 
         // GET: Faculties/Details/5
+        [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,6 +43,8 @@ namespace WebApplication.Controllers
         }
 
         // GET: Faculties/Create
+        [HttpGet("Create")]
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -48,6 +53,7 @@ namespace WebApplication.Controllers
         // POST: Faculties/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Faculty faculties)
@@ -61,6 +67,8 @@ namespace WebApplication.Controllers
         }
 
         // GET: Faculties/Edit/5
+        [HttpGet("Edit/{id}")]
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,6 +90,7 @@ namespace WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Faculty faculties)
         {
             if (id != faculties.Id)
@@ -112,6 +121,8 @@ namespace WebApplication.Controllers
         }
 
         // GET: Faculties/Delete/5
+        [HttpDelete("Delete/{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,6 +142,7 @@ namespace WebApplication.Controllers
         // POST: Faculties/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var faculties = await _repo.GetAsync(f => f.Id == id);

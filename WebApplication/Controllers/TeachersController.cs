@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using WebApplication.Data;
 using WebApplication.Models;
 
@@ -51,6 +52,7 @@ namespace WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,EmploymentDate,Name,Premium,Salary,Surname")] Teacher teachers)
         {
             if (ModelState.IsValid)
@@ -63,6 +65,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Teachers/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,6 +86,7 @@ namespace WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,EmploymentDate,Name,Premium,Salary,Surname")] Teacher teachers)
         {
             if (id != teachers.Id)
@@ -114,6 +118,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Teachers/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,6 +139,7 @@ namespace WebApplication.Controllers
         // POST: Teachers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var teachers = await _context.Teachers.FindAsync(id);

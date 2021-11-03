@@ -2,7 +2,10 @@
 {
     public class PagableModel
     {
-        public int Skip { get; set; }
-        public int Take { get; set; }
+        public int Skip { get; set; } = 0;
+        /// <summary>
+        /// Default = 50
+        /// </summary>
+        public int Take { get; set; } = 50;
     }
 }

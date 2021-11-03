@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using WebApplication.Data;
 using WebApplication.Models;
 
@@ -41,6 +42,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Groups/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -50,6 +52,7 @@ namespace WebApplication.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Rating,Year")] Group @group)
         {
@@ -63,6 +66,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Groups/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,6 +86,7 @@ namespace WebApplication.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Rating,Year,DepartmentId")] Group @group)
         {
@@ -114,6 +119,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Groups/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,6 +140,7 @@ namespace WebApplication.Controllers
         // POST: Groups/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var groups = await _context.Groups.FindAsync(id);

@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using WebApplication.Data.Repositories;
 using WebApplication.Models;
-using WebApplication.Models.Dto;
 using WebApplication.Models.FilterModels;
 using WebApplication.Services.Interfaces;
 
@@ -41,6 +40,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(Department entity)
         {
             try
@@ -55,6 +55,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Update(Department entity)
         {
             try
@@ -69,6 +70,7 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             try

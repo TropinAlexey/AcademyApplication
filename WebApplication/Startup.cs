@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using WebApplication.Data;
 using WebApplication.Data.Repositories;
 using WebApplication.Services;
@@ -61,6 +62,7 @@ namespace WebApplication
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+                app.UseSerilogRequestLogging();
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();

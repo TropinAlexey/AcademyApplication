@@ -10,12 +10,14 @@ namespace WebApi
         {
             using var log = new LoggerConfiguration()
                 .WriteTo.Console()
+                .WriteTo.Debug()
                 .CreateLogger();
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
