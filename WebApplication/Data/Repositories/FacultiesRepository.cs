@@ -2,7 +2,6 @@
 using System.Linq;
 using WebApplication.Models;
 using WebApplication.Models.Dto;
-using WebApplication.Services.Interfaces;
 
 namespace WebApplication.Data.Repositories
 {
@@ -18,8 +17,8 @@ namespace WebApplication.Data.Repositories
         public IQueryable<OverviewDto> GetOverview()
         {
             var result = (from f in _context.Faculties
-                          from d in _context.Departments.Where(d => d.FacultyId == f.Id)
-                          from g in _context.Groups.Where(g => g.DepartmentId == d.Id)
+                          from d in _context.Departments.Where(d => d.FacultyId == f.Id).DefaultIfEmpty()
+                          from g in _context.Groups.Where(g => g.DepartmentId == d.Id).DefaultIfEmpty()
                           from gr in _context.GroupsLectures.Where(gr => gr.GroupId == g.Id).DefaultIfEmpty()
                           from l in _context.Lectures.Where(l => l.Id == gr.LectureId.Value).DefaultIfEmpty()
                           from t in _context.Teachers.Where(t => t.Id == l.TeacherId).DefaultIfEmpty()

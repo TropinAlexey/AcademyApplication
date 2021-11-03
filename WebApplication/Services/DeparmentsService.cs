@@ -78,7 +78,7 @@ namespace WebApplication.Services
 
         public async Task<ICollection<OverviewDto>> GetOverviewAsync()
         {
-            var result = await _facultiesRepository.GetOverview().ToArrayAsync();
+            var result = await _facultiesRepository.GetOverview().OrderBy(f => f.FacultyName).ToArrayAsync();
             if (decimal.TryParse(_rate, NumberStyles.Any, CultureInfo.InvariantCulture, out var rateDecimal))
             {
                 foreach (var department in result)

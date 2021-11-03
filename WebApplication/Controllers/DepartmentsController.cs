@@ -36,6 +36,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Departments/Search
+        [HttpGet("Search")]
         public IActionResult DepartmentsSearch()
         {
             return View();

@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using WebApplication.Data.Repositories;
 using WebApplication.Models;
+using WebApplication.Models.Dto;
+using WebApplication.Models.FilterModels;
 using WebApplication.Services.Interfaces;
 
 namespace WebApi.Controllers
@@ -12,13 +17,15 @@ namespace WebApi.Controllers
     public class DeparmentsController : ControllerBase
     {
         private readonly IDepartmentsService _departmentsService;
+        private readonly IFacultiesRepository _facultiesRepository;
 
-        public DeparmentsController(ILogger<DeparmentsController> logger, IDepartmentsService departmentsService)
+        public DeparmentsController(ILogger<DeparmentsController> logger, IDepartmentsService departmentsService, IFacultiesRepository facultiesRepository)
         {
             _departmentsService = departmentsService;
+            _facultiesRepository = facultiesRepository;
         }
 
-        [HttpGet]
+        [HttpGet("many")]
         public async Task<IActionResult> GetMany()
         {
             var result = await _departmentsService.GetManyDepartments();
@@ -74,6 +81,17 @@ namespace WebApi.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        [HttpGet("Overview")]
+        public IActionResult GetManyFaculties([FromQuery] OverviewFilterModel filterModel)
+        {
+            var result = _facultiesRepository.GetOverview();
+            if (filterModel.Financing != null) result = result.Where(r => r.Financing == filterModel.Financing);
+            if (filterModel.TeacherSurname != null) result = result.Where(r => r.TeacherSurname.Contains(filterModel.TeacherSurname));
+            if (filterModel.SubjectName != null) result = result.Where(r => r.SubjectName == filterModel.SubjectName);
+            if (filterModel.EmploymentDate != null) result = result.Where(r => r.EmploymentDate == filterModel.EmploymentDate);
+            return Ok(result.Skip(filterModel.Skip).Take(filterModel.Take));
         }
     }
 }
