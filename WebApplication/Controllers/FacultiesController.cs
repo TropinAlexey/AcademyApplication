@@ -7,6 +7,7 @@ using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class FacultiesController : Controller
     {
         private readonly IFacultiesRepository _repo;

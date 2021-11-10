@@ -8,6 +8,7 @@ using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class GroupsController : Controller
     {
         private readonly ApplicationDbContext _context;

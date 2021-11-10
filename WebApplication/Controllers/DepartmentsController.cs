@@ -10,6 +10,7 @@ using WebApplication.Services.Interfaces;
 namespace WebApplication.Controllers
 {
     [Route("Departments")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class DepartmentsController : Controller
     {
         private readonly IDepartmentsService _departmentsService;

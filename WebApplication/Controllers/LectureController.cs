@@ -9,6 +9,7 @@ using WebApplication.Services.Interfaces;
 namespace WebApplication.Controllers
 {
     [Route("Lecture")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class LectureController : Controller
     {
         private readonly ILectureService _lectureService;
@@ -49,13 +50,13 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var Lectures = await _lectureService.GetLectureIdAsync(id.Value);
-            if (Lectures == null)
+            var lecture = await _lectureService.GetLectureIdAsync(id.Value);
+            if (lecture == null)
             {
                 return NotFound();
             }
 
-            return View(Lectures);
+            return View(lecture);
         }
 
         // GET: Lecture/Create

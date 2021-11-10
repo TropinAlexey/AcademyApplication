@@ -8,6 +8,7 @@ using WebApplication.Services.Interfaces;
 
 namespace WebApplication.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller
     {
         private readonly IDepartmentsService _departmentsService;

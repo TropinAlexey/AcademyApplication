@@ -8,6 +8,7 @@ using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class TeachersController : Controller
     {
         private readonly ApplicationDbContext _context;
