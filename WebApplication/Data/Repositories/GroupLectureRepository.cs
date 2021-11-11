@@ -2,7 +2,7 @@
 
 namespace WebApplication.Data.Repositories
 {
-    public class GroupLectureRepository : BaseRepository<GroupLecture>, IGroupLectureRepository
+    public class GroupLectureRepository : GenericRepository<GroupLecture>, IGroupLectureRepository
     {
         private readonly ApplicationDbContext _context;
 

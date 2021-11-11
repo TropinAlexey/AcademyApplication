@@ -2,7 +2,7 @@
 
 namespace WebApplication.Data.Repositories
 {
-    public class SubjectsRepository : BaseRepository<Subject>, ISubjectsRepository
+    public class SubjectsRepository : GenericRepository<Subject>, ISubjectsRepository
     {
         private readonly ApplicationDbContext _context;
 

@@ -5,7 +5,7 @@ using WebApplication.Models.Dto;
 
 namespace WebApplication.Data.Repositories
 {
-    public class FacultiesRepository : BaseRepository<Faculty>, IFacultiesRepository
+    public class FacultiesRepository : GenericRepository<Faculty>, IFacultiesRepository
     {
         private readonly ApplicationDbContext _context;
 

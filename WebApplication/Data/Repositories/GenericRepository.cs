@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication.Data.Repositories
 {
-    public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
+    public abstract class GenericRepository<T> : IBaseRepository<T> where T : class
     {
         private readonly ApplicationDbContext _context;
         private readonly DbSet<T> DbSetEntity;
 
-        protected BaseRepository(ApplicationDbContext context)
+        protected GenericRepository(ApplicationDbContext context)
         {
             _context = context;
             DbSetEntity = _context.Set<T>();
